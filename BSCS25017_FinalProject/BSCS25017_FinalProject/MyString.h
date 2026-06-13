@@ -99,8 +99,9 @@ public:
 		return *this;
 	}
 	//Member
-	void Print() const {
-		cout << "' " << this->chArr << " '";
+	friend ostream& operator<<(ostream& out,const MyString& other) {
+		cout << "' " << other.chArr << " '";
+		return out;
 	}
 	int Length() const {
 		int i = 0;
