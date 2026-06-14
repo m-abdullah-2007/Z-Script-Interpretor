@@ -12,6 +12,8 @@ public:
 class NumberValue :public Value {
 	double num;
 public:
+	NumberValue(double p=0.0):num(p) {}
+
 	MyString to_string() {
 		MyString temp;
 		temp.itos(num);
@@ -26,11 +28,15 @@ public:
 	MyString type_name() {
 		return "number";
 	}
+	double getNum() {
+		return num;
+	}
 };
 
 class StringValue :public Value {
 	MyString str;
 public:
+	StringValue(MyString p=""):str(p){}
 	MyString to_string() {
 		return str;
 	}
@@ -45,9 +51,10 @@ public:
 	}
 };
 
-class StringValue :public Value {
+class BoolValue:public Value{
 	bool boolean;
 public:
+	BoolValue(bool p=false):boolean(p){}
 	MyString to_string() {
 		if (boolean) {
 			return "true";
