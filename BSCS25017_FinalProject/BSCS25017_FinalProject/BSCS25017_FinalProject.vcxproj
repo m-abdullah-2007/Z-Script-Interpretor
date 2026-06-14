@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Expression.h" />
     <ClInclude Include="MyString.h" />
+    <ClInclude Include="Statement.h" />
     <ClInclude Include="Value.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

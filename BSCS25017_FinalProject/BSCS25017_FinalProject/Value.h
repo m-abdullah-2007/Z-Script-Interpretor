@@ -1,5 +1,6 @@
 #pragma once
 #include"MyString.h"
+#include<iostream>
 
 class Value {
 	
