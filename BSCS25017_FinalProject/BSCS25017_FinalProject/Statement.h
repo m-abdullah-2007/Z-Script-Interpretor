@@ -10,6 +10,9 @@ public:
     Statement() : next(nullptr) {}
     virtual ~Statement() {}
     virtual void execute(Environment& env) = 0;
+    virtual Statement* getNext() {
+        return next;
+    }
 };
 
 

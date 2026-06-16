@@ -147,6 +147,7 @@
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="MyString.h" />
     <ClInclude Include="MyVector.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Statement.h" />
     <ClInclude Include="Value.h" />
   </ItemGroup>
