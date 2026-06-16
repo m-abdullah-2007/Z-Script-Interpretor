@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Environment.h" />
     <ClInclude Include="Expression.h" />
+    <ClInclude Include="Lexer.h" />
     <ClInclude Include="MyString.h" />
     <ClInclude Include="MyVector.h" />
     <ClInclude Include="Statement.h" />

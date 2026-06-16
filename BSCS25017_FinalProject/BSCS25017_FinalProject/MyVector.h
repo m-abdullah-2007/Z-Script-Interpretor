@@ -45,7 +45,7 @@ public:
 		static T emp{};
 		try {
 			if (pos < 0 || pos >= _size)
-				throw MyString("index is out of range");
+				throw string("index is out of range");
 
 			return this->ptr[pos];
 		}
