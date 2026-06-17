@@ -108,6 +108,20 @@ public:
 		for (; this->chArr[i] != '\0'; i++) {}
 		return i;
 	}
+	MyString concat_no_space(const MyString& s2) const {
+		int newSize = this->size + s2.size;
+		char* newArr = new char[newSize + 1];
+		for (int i = 0; i < this->size; i++)
+			newArr[i] = this->chArr[i];
+		for (int i = 0; i < s2.size; i++)
+			newArr[this->size + i] = s2.chArr[i];
+		newArr[newSize] = '\0';
+		MyString result;
+		delete[] result.chArr;
+		result.chArr = newArr;
+		result.size = newSize;
+		return result;
+	}
 	int stoi() {
 		int num = 0;
 		for (int i = 0; i < this->size; i++) {
@@ -237,15 +251,12 @@ public:
 	}
 	MyString operator+(const MyString& s2) const {
 		MyString result;
-		result.size = this->size + s2.size + 1;
+		result.size = this->size + s2.size;  
 		result.chArr = new char[result.size + 1];
-		for (int i = 0; i < this->size; i++) {
+		for (int i = 0; i < this->size; i++)
 			result.chArr[i] = this->chArr[i];
-		}
-		result.chArr[this->size] = ' ';
-		for (int i = 0; i < s2.size; i++) {
-			result.chArr[this->size + 1 + i] = s2.chArr[i];
-		}
+		for (int i = 0; i < s2.size; i++)
+			result.chArr[this->size + i] = s2.chArr[i];  
 		result.chArr[result.size] = '\0';
 		return result;
 	}
@@ -254,20 +265,16 @@ public:
 	}
 	MyString& operator+=(const MyString& s2) {
 		int oldSize = this->size;
-		int newSize = oldSize + s2.size + 1;
+		int newSize = oldSize + s2.size;  
 		char* newArr = new char[newSize + 1];
-		for (int i = 0; i < oldSize; i++) {
+		for (int i = 0; i < oldSize; i++)
 			newArr[i] = this->chArr[i];
-		}
-		newArr[oldSize] = ' ';
-		for (int i = 0; i < s2.size; i++) {
-			newArr[oldSize + 1 + i] = s2.chArr[i];
-		}
+		for (int i = 0; i < s2.size; i++)
+			newArr[oldSize + i] = s2.chArr[i];  
 		newArr[newSize] = '\0';
 		delete[] this->chArr;
 		this->chArr = newArr;
 		this->size = newSize;
-
 		return *this;
 	}
 	void append(const MyString& s2) {

@@ -1,6 +1,7 @@
 #pragma once
 #include"Value.h"
-class Environment;
+#include"Environment.h"
+
 
 class Expression {
 
@@ -42,19 +43,28 @@ public:
 	int line;
 
 	VariableExpr(MyString n, int l) : name(n), line(l) {}
-	Value* evaluate(Environment& env) {
-		Value* v = env.lookup(name);
 
-		if (v == nullptr) {
-			throw ZScriptError{
-				"Undefined variable '" + name + "'",
-				line,
-				RUNTIME
-			};
-		}
+    Value* evaluate(Environment& env) {
+        Value* v = env.lookup(name);
 
-		return v;
-	}
+        if (v == nullptr) {
+            throw ZScriptError{
+                MyString("Undefined variable"),
+                line, RUNTIME
+            };
+        }
+
+        if (v->type_name() == MyString("number")) {
+            return new NumberValue(static_cast<NumberValue*>(v)->getNum());
+        }
+        if (v->type_name() == MyString("string")) {
+            return new StringValue(static_cast<StringValue*>(v)->to_string());
+        }
+        if (v->type_name() == MyString("bool")) {
+            return new BoolValue(static_cast<BoolValue*>(v)->is_truthy());
+        }
+        return nullptr;
+    }
 };
 
 class BinaryExpr : public Expression {
@@ -86,9 +96,7 @@ public:
 
         if (l->type_name() != "number" || r->type_name() != "number") {
             throw ZScriptError{
-                "Type error: cannot apply '" + op + "' to " +
-                    l->type_name() + " and " + r->type_name(),
-                line, RUNTIME
+                MyString("Type error: cannot apply '").concat_no_space(op).concat_no_space(MyString("' to ")).concat_no_space(l->type_name()).concat_no_space(MyString(" and ")).concat_no_space(r->type_name()),line, RUNTIME
             };
         }
 
@@ -115,8 +123,7 @@ public:
         if (op == "<=") return new BoolValue(a <= b);
         if (op == ">=") return new BoolValue(a >= b);
 
-        // Should not be reachable if the parser only ever produces
-        // known operators -- kept as a safety net.
-        throw ZScriptError{ "Unknown operator '" + op + "'", line, RUNTIME };
+        // Safety Check
+        throw ZScriptError{ MyString("Unknown operator"), line, RUNTIME };
 	}
 };

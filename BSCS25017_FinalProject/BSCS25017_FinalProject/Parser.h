@@ -194,12 +194,18 @@ class Parser {
 
     Statement* parse_block() {
         Statement* head = nullptr;
-        Statement** tail = &head;
+        Statement* tail = nullptr;
 
         while (!check(TOKEN_RBRACE) && !is_at_end()) {
             Statement* stmt = parse_statement();
-            *tail = stmt;
-            tail = &(stmt->getNext());   // link into the chain
+            if (head == nullptr) {
+                head = stmt;
+                tail = stmt;
+            }
+            else {
+                tail->setNext(stmt);  
+                tail = stmt;
+            }
         }
 
         expect(TOKEN_RBRACE, MyString("Expected '}' to close block"));
@@ -275,7 +281,7 @@ public:
     Statement* statements[256];
     int        stmt_count;
 
-    explicit Parser(const Lexer& lexer)
+    Parser(const Lexer& lexer)
         : tokens(lexer.get_tokens()), current(0), stmt_count(0) {
         for (int i = 0; i < 256; i++) statements[i] = nullptr;
     }

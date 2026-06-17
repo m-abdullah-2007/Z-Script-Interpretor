@@ -4,16 +4,7 @@
 #include <iostream>
 using namespace std;
 
-enum ErrorType { 
-    SYNTAX,
-    RUNTIME 
-};
 
-struct ZScriptError {
-    MyString  message;
-    int line;
-    ErrorType type;
-};
 
 enum TokenType {
     // Literals
@@ -58,51 +49,51 @@ enum TokenType {
 
 struct Token {
     TokenType type;
-    const MyString&  lexeme;
-    int line;
+    MyString  lexeme;
+    int       line;
 
     Token() : type(TOKEN_EOF), lexeme(""), line(0) {}
-    Token(TokenType t, const MyString& l, int ln) : type(t), lexeme(l), line(ln) {}
+    Token(TokenType t, MyString l, int ln) : type(t), lexeme(l), line(ln) {}
+
+    Token& operator=(const Token& other) {
+        if (this == &other) return *this;
+        type = other.type;
+        lexeme = other.lexeme;  
+        line = other.line;
+        return *this;
+    }
+    Token(const Token& other) : type(other.type), lexeme(other.lexeme), line(other.line) {}
 };
 
 class Lexer {
-    MyString src;
-    myVector<Token> tokens;
+    MyString  source;
+    myVector<Token>  tokens;
     int current;
     int line;
 
-
     bool is_at_end() const {
-        return current >= src.Length();
+        return current >= source.Length();
     }
 
     char peek() const {
-        if (is_at_end()) {
-            return '\0';
-        }
-        return src[current];
+        if (is_at_end()) return '\0';
+        return source[current];
     }
 
     char peek_next() const {
-        if (current + 1 >= src.Length()){
-            return '\0';
-        }
-        return src[current + 1];
+        if (current + 1 >= source.Length()) return '\0';
+        return source[current + 1];
     }
 
     char advance() {
-        char ch = src[current];
+        char ch = source[current];
         current++;
         return ch;
     }
 
     bool match(char expected) {
-        if (is_at_end()) {
-            return false;
-        }
-        if (src[current] != expected) {
-            return false;
-        }
+        if (is_at_end())             return false;
+        if (source[current] != expected) return false;
         current++;
         return true;
     }
@@ -112,7 +103,7 @@ class Lexer {
     }
 
     bool is_digit(char c) const {
-        return (c >= '0' && c <= '9');
+        return c >= '0' && c <= '9';
     }
 
     bool is_alpha(char c) const {
@@ -125,7 +116,6 @@ class Lexer {
         return is_alpha(c) || is_digit(c);
     }
 
-    
     void scan_string() {
         MyString value;
         while (!is_at_end() && peek() != '"') {
@@ -134,23 +124,23 @@ class Lexer {
         }
 
         if (is_at_end()) {
-            throw ZScriptError{ "Unterminated string literal ( ';' expected )", line, SYNTAX };
+            throw ZScriptError{ "Unterminated string literal", line, SYNTAX };
         }
 
-        advance();
+        advance(); 
         add_token(TOKEN_STRING, value);
     }
 
     void scan_number() {
         MyString num;
-        num += MyString(src[current - 1]); 
+        num += MyString(source[current - 1]); 
 
         while (!is_at_end() && is_digit(peek())) {
             num += MyString(advance());
         }
 
         if (!is_at_end() && peek() == '.' && is_digit(peek_next())) {
-            num += MyString(advance()); // consume '.'
+            num += MyString(advance()); 
             while (!is_at_end() && is_digit(peek())) {
                 num += MyString(advance());
             }
@@ -161,12 +151,13 @@ class Lexer {
 
     void scan_identifier() {
         MyString id;
-        id += MyString(src[current - 1]);
+        id += MyString(source[current - 1]); 
 
         while (!is_at_end() && is_alnum(peek())) {
             id += MyString(advance());
         }
 
+        
         if (id == "let")   add_token(TOKEN_LET, id);
         else if (id == "if")    add_token(TOKEN_IF, id);
         else if (id == "else")  add_token(TOKEN_ELSE, id);
@@ -176,6 +167,8 @@ class Lexer {
         else if (id == "false") add_token(TOKEN_FALSE, id);
         else                    add_token(TOKEN_IDENTIFIER, id);
     }
+
+    
 
     void scan_next() {
         char c = advance();
@@ -193,7 +186,11 @@ class Lexer {
 
         case '/':
             if (match('/')) {
-                while (!is_at_end() && peek() != '\n') advance();
+                // single-line comment — skip everything until newline
+                // including any non-ASCII / Unicode bytes
+                while (!is_at_end() && peek() != '\n' && peek() != '\r') {
+                    advance();
+                }
             }
             else {
                 add_token(TOKEN_SLASH, MyString("/"));
@@ -234,9 +231,12 @@ class Lexer {
             else if (is_alpha(c)) {
                 scan_identifier();
             }
+            else if ((unsigned char)c > 127) {
+
+            }
             else {
                 throw ZScriptError{
-                    MyString("Unexpected character '") + MyString(c) + MyString("'"),
+                    MyString("Unexpected character"),
                     line, SYNTAX
                 };
             }
@@ -245,8 +245,8 @@ class Lexer {
     }
 
 public:
-    Lexer(const MyString& src) : src(src), current(0), line(1) {}
-
+    Lexer(const MyString& src) : source(src), current(0), line(1) {}
+    
     void tokenize() {
         while (!is_at_end()) {
             scan_next();
@@ -257,6 +257,7 @@ public:
     const myVector<Token>& get_tokens() const {
         return tokens;
     }
+
 
     Token get(int i) const {
         return tokens[i];

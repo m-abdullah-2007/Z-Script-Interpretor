@@ -143,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Environment.h" />
+    <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="MyString.h" />
@@ -150,6 +151,10 @@
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Statement.h" />
     <ClInclude Include="Value.h" />
+    <ClInclude Include="ZSCRIPT_ERROR.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

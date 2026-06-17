@@ -1,5 +1,6 @@
 #pragma once
 #include"MyString.h"
+#include"ZSCRIPT_ERROR.h"
 #include<iostream>
 
 class Value {
@@ -41,6 +42,7 @@ public:
 	MyString to_string() {
 		return str;
 	}
+	MyString getString() { return str; }
 	bool is_truthy() {
 		if (str == "") {
 			return false;

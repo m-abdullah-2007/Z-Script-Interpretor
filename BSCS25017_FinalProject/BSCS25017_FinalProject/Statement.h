@@ -1,7 +1,7 @@
 #pragma once
 #include "expression.h"
 using namespace std;
-class Environment; 
+#include "Environment.h"
 
 
 class Statement {
@@ -10,6 +10,7 @@ public:
     Statement() : next(nullptr) {}
     virtual ~Statement() {}
     virtual void execute(Environment& env) = 0;
+    void setNext(Statement* n) { next = n; }
     virtual Statement* getNext() {
         return next;
     }
@@ -108,7 +109,7 @@ public:
         Statement* current = first;
         while (current != nullptr) {
             current->execute(child_env);
-            current = current->next;
+            current = current->getNext();
         }
     }
 };
