@@ -291,8 +291,7 @@ public:
             statements[stmt_count++] = parse_statement();
             if (stmt_count >= 256) {
                 throw ZScriptError{
-                    MyString("Program too large (> 256 top-level statements)"),
-                    peek().line, SYNTAX
+                    MyString("Program too large (> 256 top-level statements)"),peek().line, SYNTAX
                 };
             }
         }

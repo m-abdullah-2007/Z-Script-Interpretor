@@ -81,17 +81,24 @@ public:
         Value* r = right->evaluate(env);
 
         if (op == "+" && (l->type_name() == "string" || r->type_name() == "string")) {
-            return new StringValue(l->to_string() + r->to_string());
+            Value* result = new StringValue(l->to_string() + r->to_string());
+            l->release();
+            r->release();
+            return result;
         }
 
         if (op == "==" || op == "!=") {
             bool same = (l->type_name() == r->type_name()) &&(l->to_string() == r->to_string());
+            Value* result;
             if (op == "==") {
-                return new BoolValue(same);
+                result = new BoolValue(same);
             }
             else {
-                return new BoolValue(!same);
+                result = new BoolValue(!same);
             }
+            l->release();
+            r->release();
+            return result;
         }
 
         if (l->type_name() != "number" || r->type_name() != "number") {
@@ -107,23 +114,26 @@ public:
         double a = ln->getNum();
         double b = rn->getNum();
 
-        if (op == "+")  return new NumberValue(a + b);
-        if (op == "-")  return new NumberValue(a - b);
-        if (op == "*")  return new NumberValue(a * b);
-
-        if (op == "/") {
+        Value* result = nullptr;
+        if (op == "+")  result = new NumberValue(a + b);
+        else if (op == "-")  result = new NumberValue(a - b);
+        else if (op == "*")  result = new NumberValue(a * b);
+        else if (op == "/") {
             if (b == 0.0) {
                 throw ZScriptError{ "Division by zero", line, RUNTIME };
             }
-            return new NumberValue(a / b);
+            result = new NumberValue(a / b);
+        }
+        else if (op == "<")  result = new BoolValue(a < b);
+        else if (op == ">")  result = new BoolValue(a > b);
+        else if (op == "<=") result = new BoolValue(a <= b);
+        else if (op == ">=") result = new BoolValue(a >= b);
+        else {
+            throw ZScriptError{ MyString("Unknown operator"), line, RUNTIME };
         }
 
-        if (op == "<")  return new BoolValue(a < b);
-        if (op == ">")  return new BoolValue(a > b);
-        if (op == "<=") return new BoolValue(a <= b);
-        if (op == ">=") return new BoolValue(a >= b);
-
-        // Safety Check
-        throw ZScriptError{ MyString("Unknown operator"), line, RUNTIME };
+        l->release();
+        r->release();
+        return result;
 	}
 };

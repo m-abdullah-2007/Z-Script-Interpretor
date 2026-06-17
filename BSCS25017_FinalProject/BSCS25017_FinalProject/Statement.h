@@ -25,7 +25,7 @@ public:
     void execute(Environment& env) override {
         Value* result = expr->evaluate(env);
         cout << result->to_string() << std::endl;
-        delete result;
+        result->release();
     }
 };
 
@@ -70,7 +70,7 @@ public:
         else if (else_branch != nullptr) {
             else_branch->execute(env);
         }
-        delete result;
+        result->release();
     }
 };
 
@@ -86,7 +86,7 @@ public:
         while (true) {
             Value* result = condition->evaluate(env);
             bool cont = result->is_truthy();
-            delete result;
+            result->release();
 
             if (!cont) {
                 break;

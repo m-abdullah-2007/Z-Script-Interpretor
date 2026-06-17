@@ -4,11 +4,25 @@
 #include<iostream>
 
 class Value {
-	
+protected:
+	int ref_count;
 public:
+	Value() : ref_count(0) {}
+	virtual ~Value() {}
+
 	virtual MyString to_string() = 0;
 	virtual bool is_truthy() = 0;
 	virtual MyString type_name() = 0;
+	void retain() {
+		ref_count++;
+	}
+
+	void release() {
+		ref_count--;
+		if (ref_count <= 0) {
+			delete this;
+		}
+	}
 };
 
 class NumberValue :public Value {

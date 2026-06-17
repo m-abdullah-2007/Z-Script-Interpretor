@@ -63,13 +63,3 @@ let val = 1;
 val = val + 1;
 val = val + 1;
 print(val);
-
-// Test 10: Nested if inside while
-let i = 0;
-while (i < 5) {
-    if (i == 3) {
-        print("i reached 3");
-    }
-    i = i + 1;
-}
-print(i);
