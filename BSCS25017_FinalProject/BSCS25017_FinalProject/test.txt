@@ -1,10 +1,11 @@
-// Test 1: Basic let and print
+print("Test 1: Basic let and print");
 let x = 10;
 let y = 20;
 print(x);
 print(y);
 
-// Test 2: Arithmetic
+print("
+Test 2: Arithmetic");
 let sum = x + y;
 let diff = y - x;
 let prod = x * y;
@@ -14,26 +15,30 @@ print(diff);
 print(prod);
 print(div);
 
-// Test 3: String variable and print
+print("
+Test 3: String variable and print");
 let name = "ZScript";
 print(name);
 
-// Test 4: Boolean literals
+print("
+Test 4: Boolean literals");
 let flag = true;
 print(flag);
 
-// Test 5: if / else
+print("
+Test 5: if / else");
 if (x < y) {
     print("x is less than y");
 }
 
-if (x > y) {
+if (x<y) {
     print("x is greater");
 } else {
     print("y is greater or equal");
 }
 
-// Test 6: Equality and inequality
+print("
+Test 6: Equality and inequality");
 let a = 5;
 let b = 5;
 if (a == b) {
@@ -43,14 +48,16 @@ if (a != y) {
     print("a does not equal y");
 }
 
-// Test 7: while loop
+print("
+Test 7: while loop");
 let counter = 3;
 while (counter > 0) {
     print(counter);
     counter = counter - 1;
 }
-
-// Test 8: Block scoping
+ 
+print("
+Test 8: Block scoping");
 let outer = 99;
 if (true) {
     let inner = 42;
@@ -58,7 +65,8 @@ if (true) {
     print(outer);
 }
 
-// Test 9: Assignment updates existing variable
+print("
+Test 9: Assignment updates existing variable");
 let val = 1;
 val = val + 1;
 val = val + 1;

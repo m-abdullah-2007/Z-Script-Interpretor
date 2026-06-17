@@ -52,6 +52,7 @@ void run(const MyString& source) {
         }
 
     }
+
     catch (ZScriptError& e) {
         handler.report(e);
     }

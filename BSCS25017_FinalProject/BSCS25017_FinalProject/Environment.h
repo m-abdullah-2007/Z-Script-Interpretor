@@ -64,7 +64,7 @@ class Environment {
 
 public:
 
-	Environment(Environment* parent = nullptr) : parent(parent) {}
+	Environment(Environment* _parent = nullptr) : parent(_parent) {}
 	~Environment(){}
 
 	void define(const MyString& _name, Value* val) {

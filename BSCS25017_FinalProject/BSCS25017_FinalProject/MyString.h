@@ -100,7 +100,7 @@ public:
 	}
 	//Member
 	friend ostream& operator<<(ostream& out,const MyString& other) {
-		cout << "' " << other.chArr << " '";
+		cout << " " <<other.chArr << " ";
 		return out;
 	}
 	int Length() const {
