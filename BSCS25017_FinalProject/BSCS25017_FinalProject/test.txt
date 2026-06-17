@@ -1,6 +1,6 @@
 print("Test 1: Basic let and print");
-let x = 10;
-let y = 20;
+let x = 10.5;
+let y = 20.5;
 print(x);
 print(y);
 

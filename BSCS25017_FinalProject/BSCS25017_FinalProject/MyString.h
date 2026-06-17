@@ -133,20 +133,46 @@ public:
 	void ReplaceFirst(char ch) {
 		this->chArr[0] = ch;
 	}
-	MyString itos(int num) {
-		int temp = num, dig = 0;
-		while (temp > 0) {
-			temp /= 10;
-			dig++;
-		}
+	MyString itos(double num) {
+		int intPart = (int)num;
+		double fracPart = num - intPart;
+		int temp = intPart, dig = 0;
+		if (temp == 0) dig = 1;
+		while (temp > 0) { temp /= 10; dig++; }
+
 		delete[] this->chArr;
-		this->size = dig;
-		this->chArr = new char[this->size + 1];
-		for (int i = this->size - 1; i >= 0; i--) {
-			this->chArr[i] = char(num % 10) + '0';
-			num /= 10;
+
+		if (fracPart < 0.000001) {
+			this->size = dig;
+			this->chArr = new char[this->size + 1];
+			int n = intPart;
+			for (int i = this->size - 1; i >= 0; i--) {
+				this->chArr[i] = char(n % 10) + '0';
+				n /= 10;
+			}
+			this->chArr[this->size] = '\0';
 		}
-		this->chArr[this->size] = '\0';
+		else {
+			int fracInt = (int)(fracPart * 1000000 + 0.5);
+			int fracDig = 6;
+			while (fracDig > 1 && fracInt % 10 == 0) { fracInt /= 10; fracDig--; }
+
+			this->size = dig + 1 + fracDig; 
+			this->chArr = new char[this->size + 1];
+
+			int n = intPart;
+			for (int i = dig - 1; i >= 0; i--) {
+				this->chArr[i] = char(n % 10) + '0';
+				n /= 10;
+			}
+			this->chArr[dig] = '.';
+			int f = fracInt;
+			for (int i = this->size - 1; i >= dig + 1; i--) {
+				this->chArr[i] = char(f % 10) + '0';
+				f /= 10;
+			}
+			this->chArr[this->size] = '\0';
+		}
 		return *this;
 	}
 	MyString& trim() {
