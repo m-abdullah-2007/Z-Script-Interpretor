@@ -18,6 +18,9 @@
     <ClCompile Include="bscs25017_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gui_man.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Value.h">

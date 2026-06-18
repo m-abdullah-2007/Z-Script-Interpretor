@@ -168,13 +168,10 @@ class Parser {
     
     Statement* parse_let() {
         // let <identifier> = <expression> ;
-        Token name_tok = expect(TOKEN_IDENTIFIER,
-            MyString("Expected variable name after 'let'"));
-        expect(TOKEN_ASSIGN,
-            MyString("Expected '=' after variable name in 'let'"));
+        Token name_tok = expect(TOKEN_IDENTIFIER,MyString("Expected variable name after 'let'"));
+        expect(TOKEN_ASSIGN,MyString("Expected '=' after variable name in 'let'"));
         Expression* init = parse_expression();
-        expect(TOKEN_SEMICOLON,
-            MyString("Expected ';' after 'let' initialiser"));
+        expect(TOKEN_SEMICOLON,MyString("Expected ';' after 'let' initialiser"));
 
         return new LetStmt(name_tok.lexeme, init);
     }
@@ -266,8 +263,7 @@ class Parser {
         if (match(TOKEN_IDENTIFIER)) {
             MyString name = previous().lexeme;
             int      ln = previous().line;
-            expect(TOKEN_ASSIGN,
-                MyString("Expected '=' after variable name '") + name + MyString("'"));
+            expect(TOKEN_ASSIGN,MyString("Expected '=' after variable name '") + name + MyString("'"));
             return parse_assign(name, ln);
         }
 
@@ -281,8 +277,7 @@ public:
     Statement* statements[256];
     int        stmt_count;
 
-    Parser(const Lexer& lexer)
-        : tokens(lexer.get_tokens()), current(0), stmt_count(0) {
+    Parser(const Lexer& lexer): tokens(lexer.get_tokens()), current(0), stmt_count(0) {
         for (int i = 0; i < 256; i++) statements[i] = nullptr;
     }
 

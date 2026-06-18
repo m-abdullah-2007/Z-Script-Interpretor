@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include<string>
+#include "raylib.h"
 using namespace std;
 
 #include "MyString.h"
@@ -61,7 +62,7 @@ void run(const MyString& source) {
         cout << "\n--- " << handler.error_count() << " error(s) reported ---" << endl;
     }
 }
-int main() {
+int main() {    
     const char* filename = "test.txt";
 
     cout << "========================================" << endl;

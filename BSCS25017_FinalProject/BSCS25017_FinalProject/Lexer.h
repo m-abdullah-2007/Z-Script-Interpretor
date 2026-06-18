@@ -56,9 +56,11 @@ struct Token {
     Token(TokenType t, MyString l, int ln) : type(t), lexeme(l), line(ln) {}
 
     Token& operator=(const Token& other) {
-        if (this == &other) return *this;
+        if (this == &other) {
+            return *this;
+        }
         type = other.type;
-        lexeme = other.lexeme;  
+        lexeme = other.lexeme; // from mystring  
         line = other.line;
         return *this;
     }
@@ -119,7 +121,9 @@ class Lexer {
     void scan_string() {
         MyString value;
         while (!is_at_end() && peek() != '"') {
-            if (peek() == '\n') line++;
+            if (peek() == '\n') {
+                line++;
+            }
             value += MyString(advance());
         }
 
@@ -236,8 +240,7 @@ class Lexer {
             }
             else {
                 throw ZScriptError{
-                    MyString("Unexpected character"),
-                    line, SYNTAX
+                    MyString("Unexpected character"),line, SYNTAX
                 };
             }
             break;
