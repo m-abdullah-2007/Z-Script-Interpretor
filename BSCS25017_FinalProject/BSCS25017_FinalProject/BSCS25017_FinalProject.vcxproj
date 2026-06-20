@@ -151,8 +151,9 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bscs25017_main.cpp" />
-    <ClCompile Include="gui_man.cpp" />
+    <ClCompile Include="terminal_main.cpp" />
+    <ClCompile Include="gui_main.cpp" />
+    <ClCompile Include="Statement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Environment.h" />

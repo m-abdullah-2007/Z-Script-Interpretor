@@ -62,4 +62,8 @@ public:
     void clear() {
         errors.clear();
     }
+
+    const ZScriptError& get_error(int i) const {
+        return errors[i];
+    }
 };

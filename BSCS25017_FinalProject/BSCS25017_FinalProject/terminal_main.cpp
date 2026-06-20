@@ -62,7 +62,7 @@ void run(const MyString& source) {
         cout << "\n--- " << handler.error_count() << " error(s) reported ---" << endl;
     }
 }
-int main() {    
+int main1() {    
     const char* filename = "test.txt";
 
     cout << "========================================" << endl;

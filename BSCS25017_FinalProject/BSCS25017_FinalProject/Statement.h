@@ -21,14 +21,28 @@ public:
 class PrintStmt : public Statement {
     Expression* expr;
 public:
+    static void (*print_handler)(const MyString&);
+
+    static void set_handler(void (*fn)(const MyString&)) {
+        print_handler = fn;
+    }
+
     PrintStmt(Expression* e) : expr(e) {}
+
     void execute(Environment& env) override {
         Value* result = expr->evaluate(env);
-        cout << result->to_string() << std::endl;
+        if (print_handler) {
+            print_handler(result->to_string());
+        }
+        else {
+            cout << result->to_string() << endl;
+        }
         result->release();
     }
+
 };
 
+//void (*PrintStmt::print_handler)(const MyString&) = nullptr;
 
 class LetStmt : public Statement {
 public:

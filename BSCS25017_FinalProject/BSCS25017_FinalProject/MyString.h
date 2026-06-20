@@ -623,6 +623,9 @@ public:
 		this->chArr = new char[size + 1];
 		this->chArr[0] = '\0';
 	}
+	const char* c_str() const {
+		return this->chArr;
+	}
 
 };
 

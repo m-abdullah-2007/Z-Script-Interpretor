@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bscs25017_main.cpp">
+    <ClCompile Include="terminal_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui_man.cpp">
+    <ClCompile Include="gui_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Statement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
