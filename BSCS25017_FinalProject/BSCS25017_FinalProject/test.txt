@@ -1,6 +1,6 @@
 print("Test 1: Basic let and print");
-let x = 10.5;
-let y = 20.5;
+let x = 10;
+let y = 20;
 print(x);
 print(y);
 
@@ -65,8 +65,7 @@ if (true) {
     print(outer);
 }
 
-print("
-Test 9: Assignment updates existing variable");
+print("Test 9: Assignment updates existing variable");
 let val = 1;
 val = val + 1;
 val = val + 1;
