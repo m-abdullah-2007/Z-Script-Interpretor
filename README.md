@@ -1,18 +1,31 @@
+<div align="center">
+
 # ZScript
 
-ZScript is a small interpreted scripting language built from scratch in C++ as an OOP semester project. It ships in two forms:
+**A small interpreted scripting language, built from scratch in C++.**
+
+![Language](https://img.shields.io/badge/language-C%2B%2B17-00599C)
+![GUI](https://img.shields.io/badge/GUI-raylib-orange)
+![Type](https://img.shields.io/badge/type-academic%20project-lightgrey)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
+
+</div>
+
+---
+
+ZScript is a lexer-to-interpreter pipeline written entirely from first principles for an Object-Oriented Programming semester project. It ships in two forms:
 
 - **Terminal interpreter** — reads a `.txt` script and runs it from the console.
-- **ZScript IDE** — a Raylib-based GUI with a built-in editor, themes, and an error popup system.
+- **ZScript IDE** — a [raylib](https://www.raylib.com/)-based desktop GUI with a built-in code editor, theme picker, and an error popup system.
 
-Both share the same lexer, parser, AST, and interpreter core. Only the input/output layer differs.
+Both share the same lexer, parser, AST, and interpreter core — only the input/output layer differs.
 
 ---
 
 ## Table of Contents
 
-- [Features](#features)
-- [Language Rules](#language-rules)
+- [Highlights](#highlights)
+- [Language Reference](#language-reference)
   - [Variables](#variables)
   - [Data Types](#data-types)
   - [Operators](#operators)
@@ -22,29 +35,30 @@ Both share the same lexer, parser, AST, and interpreter core. Only the input/out
   - [Comments](#comments)
   - [Errors](#errors)
 - [Example Program](#example-program)
-- [How to Run](#how-to-run)
-  - [Option 1 — Prebuilt .exe (Windows)](#option-1--prebuilt-exe-windows)
+- [Getting Started](#getting-started)
+  - [Option 1 — Prebuilt binary (Windows)](#option-1--prebuilt-binary-windows)
   - [Option 2 — Terminal interpreter from source](#option-2--terminal-interpreter-from-source)
   - [Option 3 — GUI IDE from source](#option-3--gui-ide-from-source)
 - [Project Structure](#project-structure)
 - [Architecture Overview](#architecture-overview)
 - [Known Limitations](#known-limitations)
+- [About](#about)
 
 ---
 
-## Features
+## Highlights
 
-- C-like syntax: `let`, `if` / `else`, `while`, `print`
-- Three value types: number (double), string, boolean
-- Lexical block scoping with parent-pointer environments
-- Reference-counted values (no memory leaks from script execution)
-- Custom hand-written `MyString` and `myVector<T>` — no STL containers used in the interpreter core
+- C-like syntax — `let`, `if` / `else`, `while`, `print`
+- Three value types: number (`double`), string, and boolean
+- Lexical block scoping via a parent-pointer environment chain
+- Reference-counted values, so script execution does not leak memory
+- Hand-written `MyString` and `myVector<T>` — the interpreter core uses no STL containers
 - Detailed syntax and runtime error reporting with line numbers
-- A full desktop IDE (theme picker, code editor, scrollable output panel, error popups) built on [raylib](https://www.raylib.com/)
+- A full desktop IDE — theme picker, code editor, scrollable output panel, and error popups — built on raylib
 
 ---
 
-## Language Rules
+## Language Reference
 
 ### Variables
 
@@ -55,32 +69,33 @@ let x = 10;
 x = x + 1;        // assignment — variable must already exist
 ```
 
-Assigning to a variable that was never declared with `let` does nothing silently fail — `assign()` walks up the scope chain and if no binding is found anywhere, the statement has no effect. Always `let` before assigning.
+Assigning to a variable that was never declared with `let` fails silently: `assign()` walks up the scope chain, and if no binding is found anywhere, the statement simply has no effect. Always declare with `let` before assigning.
 
 ### Data Types
 
-| Type    | Example         | Falsy when        |
-|---------|-----------------|--------------------|
-| number  | `10`, `3.5`     | value is `0` |
-| string  | `"hello"`       | value is `""` (empty) |
-| boolean | `true`, `false` | value is `false` |
+| Type      | Example         | Falsy when             |
+|-----------|-----------------|-------------------------|
+| `number`  | `10`, `3.5`     | value is `0`            |
+| `string`  | `"hello"`       | value is `""` (empty)   |
+| `boolean` | `true`, `false` | value is `false`        |
 
-Numbers are stored internally as `double`. Integers and decimals are both written the same way (`10` or `10.5`); ZScript does not distinguish int vs float at the language level.
+Numbers are stored internally as `double`. Integers and decimals are written the same way (`10` or `10.5`) — ZScript does not distinguish `int` vs `float` at the language level.
 
 ### Operators
 
-| Operator | Meaning | Works on |
-|----------|---------|----------|
-| `+` | addition, or string concatenation if either side is a string | number, string |
-| `-` `*` `/` | subtraction, multiplication, division | number only |
-| `<` `>` `<=` `>=` | numeric comparison | number only |
-| `==` `!=` | equality — compares type **and** value | any |
-| `=` | assignment | — |
+| Operator             | Meaning                                                | Works on         |
+|----------------------|---------------------------------------------------------|-------------------|
+| `+`                  | addition, or string concatenation if either side is a string | number, string |
+| `-` `*` `/`          | subtraction, multiplication, division                  | number only       |
+| `<` `>` `<=` `>=`    | numeric comparison                                     | number only       |
+| `==` `!=`            | equality — compares type **and** value                 | any               |
+| `=`                  | assignment                                             | —                 |
 
 Notes:
-- `+` between a string and anything else stringifies the non-string side and concatenates (e.g. `"score: " + 10` → `"score: 10"`).
-- Dividing by zero throws a runtime error — it does not return `inf` or crash.
-- Comparison operators (`<`, `>`, `<=`, `>=`) only accept two numbers; using them on strings or booleans throws a type error.
+
+- `+` between a string and anything else stringifies the non-string side and concatenates — e.g. `"score: " + 10` → `"score: 10"`.
+- Dividing by zero throws a runtime error; it does not return `inf` or crash.
+- Comparison operators (`<`, `>`, `<=`, `>=`) only accept two numbers — using them on strings or booleans throws a type error.
 
 ### Print
 
@@ -116,7 +131,7 @@ Loops until `condition` evaluates to a falsy value.
 
 ### Scoping
 
-Every `{ }` block (the body of an `if`, `else`, or `while`) creates a new child scope. Variables declared with `let` inside a block do not leak out:
+Every `{ }` block — the body of an `if`, `else`, or `while` — creates a new child scope. Variables declared with `let` inside a block do not leak out:
 
 ```zscript
 let outer = 1;
@@ -127,7 +142,7 @@ if (true) {
 print(inner);        // ERROR — inner does not exist out here
 ```
 
-Reading a variable from an enclosing scope works (lookups walk up the parent chain); declaring a *new* variable inside a block never escapes it.
+Reading a variable from an enclosing scope works fine, since lookups walk up the parent chain. Declaring a *new* variable inside a block, however, never escapes it.
 
 ### Comments
 
@@ -139,10 +154,10 @@ There is no block-comment syntax (`/* ... */`).
 
 ### Errors
 
-ZScript reports two kinds of errors, each with the line number where they occurred:
+ZScript reports two kinds of errors, each with the line number where it occurred:
 
-- **Syntax errors** — malformed code caught while reading the file (missing `;`, unmatched `{`, unexpected token, unterminated string, etc.). Execution stops immediately; **only the first syntax error is shown**.
-- **Runtime errors** — problems found while running otherwise-valid code (undefined variable, type mismatch like `"a" < 5`, division by zero). The terminal build keeps running and **collects every runtime error it hits**, then prints the total count at the end. The GUI build shows them in a scrollable popup.
+- **Syntax errors** — malformed code caught while reading the file (missing `;`, unmatched `{`, unexpected token, unterminated string, etc.). Execution stops immediately, and only the first syntax error is shown.
+- **Runtime errors** — problems found while running otherwise-valid code (undefined variable, type mismatch such as `"a" < 5`, division by zero). The terminal build keeps running and collects every runtime error it hits, then prints the total count at the end. The GUI build surfaces them in a scrollable popup.
 
 ---
 
@@ -173,35 +188,34 @@ while (counter > 0) {
 }
 ```
 
-A larger sample covering every feature is included in [`test.txt`](./test.txt).
+A larger sample covering every language feature is included in [`test.txt`](./BSCS25017_FinalProject/BSCS25017_FinalProject/test.txt).
 
 ---
 
-## How to Run
+## Getting Started
 
-### Option 1 — Prebuilt .exe (Windows)
+### Option 1 — Prebuilt binary (Windows)
 
-1. Download the latest `.exe` from the repository.
-2. Place it in the same folder as the script you want to run (or use the GUI's "Open .txt" / filename screen to point at one).
-3. Double-click to launch. You'll land on the **theme picker** first (Light / Dark), then choose:
-   - **Run a file** — type a filename (must sit next to the `.exe`) and press Enter or click Load.
+1. Download `zscript.exe` from [`BSCS25017_FinalProject/BSCS25017_FinalProject`](./BSCS25017_FinalProject/BSCS25017_FinalProject), keeping `raylib.dll` in the same folder.
+2. Place the script you want to run next to the executable, or use the GUI's "Open .txt" / filename screen to point at one.
+3. Double-click to launch. You will land on the **theme picker** first (Light / Dark), then choose:
+   - **Run a file** — type a filename (must sit next to the executable) and press Enter or click Load.
    - **Write code** — opens straight into the editor with a starter snippet.
-4. Click **Run** in the toolbar (or edit the code first). Output appears in the panel below the editor; errors open as a popup — press **Esc** or click outside it to dismiss.
-
-No installation, no dependencies — raylib is statically linked into the executable.
+4. Click **Run** in the toolbar, or edit the code first. Output appears in the panel below the editor; errors open as a popup — press **Esc** or click outside it to dismiss.
 
 ### Option 2 — Terminal interpreter from source
 
 Requires only a C++ compiler (C++11 or later) — no external libraries.
 
 ```bash
+cd BSCS25017_FinalProject/BSCS25017_FinalProject
 g++ -std=c++17 -O2 terminal_main.cpp -o zscript
 ./zscript
 ```
 
 This reads `test.txt` from the current working directory by default (see `read_file("test.txt")` in `terminal_main.cpp`). To run a different script, edit the `filename` variable in `terminal_main.cpp`'s `main()`, or rename your script to `test.txt`.
 
-> Note: `terminal_main.cpp` currently includes `raylib.h` even though the console build doesn't call any raylib functions. If you're compiling the terminal version standalone without raylib installed, remove that `#include "raylib.h"` line first.
+> **Note:** `terminal_main.cpp` currently includes `raylib.h`, even though the console build does not call any raylib functions. If you are compiling the terminal version standalone without raylib installed, remove that `#include "raylib.h"` line first.
 
 ### Option 3 — GUI IDE from source
 
@@ -232,21 +246,28 @@ Run the resulting binary:
 ## Project Structure
 
 ```
-.
-├── terminal_main.cpp     # Console entry point — reads test.txt, runs it, prints to stdout
-├── gui_main.cpp           # raylib IDE entry point — themes, editor, output panel, popups
-├── Lexer.h                # Tokenizer: source text -> Token stream
-├── Parser.h               # Recursive-descent parser: tokens -> AST (Statement*/Expression*)
-├── Expression.h           # Expression node classes (literals, variables, binary ops)
-├── Statement.h            # Statement node classes (let, print, if, while, block, assign)
-├── Statement.cpp          # Definition of PrintStmt's static output-handler pointer
-├── Environment.h          # Variable scope chain (Binding struct + Environment class)
-├── Value.h                # Runtime value types: NumberValue, StringValue, BoolValue
-├── ErrorHandler.h          # Singleton error collector/printer
-├── ZSCRIPT_ERROR.h         # ZScriptError struct + ErrorType enum, thrown as C++ exceptions
-├── MyString.h              # Custom string class (no std::string in the interpreter core)
-├── MyVector.h              # Custom dynamic array template (no std::vector)
-└── test.txt                # Sample ZScript program exercising every language feature
+Z-Script-Interpretor/
+├── BSCS25017_FinalProject/
+│   ├── BSCS25017_FinalProject.slnx          # Visual Studio solution
+│   └── BSCS25017_FinalProject/
+│       ├── terminal_main.cpp                # Console entry point — reads test.txt, runs it, prints to stdout
+│       ├── gui_main.cpp                     # raylib IDE entry point — themes, editor, output panel, popups
+│       ├── Lexer.h                          # Tokenizer: source text -> Token stream
+│       ├── Parser.h                         # Recursive-descent parser: tokens -> AST
+│       ├── Expression.h                     # Expression node classes (literals, variables, binary ops)
+│       ├── Statement.h / Statement.cpp      # Statement node classes (let, print, if, while, block, assign)
+│       ├── Environment.h                    # Variable scope chain (Binding struct + Environment class)
+│       ├── Value.h                          # Runtime value types: NumberValue, StringValue, BoolValue
+│       ├── ErrorHandler.h                   # Singleton error collector/printer
+│       ├── ZSCRIPT_ERROR.h                  # ZScriptError struct + ErrorType enum, thrown as C++ exceptions
+│       ├── MyString.h                       # Custom string class (no std::string in the interpreter core)
+│       ├── MyVector.h                       # Custom dynamic array template (no std::vector)
+│       ├── test.txt                         # Sample ZScript program exercising every language feature
+│       ├── zscript.exe                      # Prebuilt Windows binary
+│       └── raylib.dll                       # Required alongside zscript.exe at runtime
+├── bscs25017_Design.pptx                    # OOP design slides
+├── bscs25017_Documentation.docx             # Design document
+└── README.md
 ```
 
 ## Architecture Overview
@@ -255,31 +276,38 @@ Run the resulting binary:
 source text
     │
     ▼
-  Lexer.tokenize()        →  flat array of Token { type, lexeme, line }
+Lexer.tokenize()          →  flat array of Token { type, lexeme, line }
     │
     ▼
-  Parser.parse()          →  Statement* statements[256] (top-level), built via
-    │                         recursive descent over operator precedence
+Parser.parse()             →  Statement* statements[256] (top-level), built via
+    │                          recursive descent over operator precedence
     ▼
 for each statement:
-  statement->execute(env) →  virtual dispatch into LetStmt / PrintStmt /
-                              IfStmt / WhileStmt / BlockStmt / AssignStmt
-    │
+  statement->execute(env)  →  virtual dispatch into LetStmt / PrintStmt /
+    │                          IfStmt / WhileStmt / BlockStmt / AssignStmt
     ▼
-expression->evaluate(env) → virtual dispatch into NumberLiteral / StringLiteral /
-                              BooleanLiteral / VariableExpr / BinaryExpr,
-                              returns a ref-counted Value*
+expression->evaluate(env)  →  virtual dispatch into NumberLiteral / StringLiteral /
+                               BooleanLiteral / VariableExpr / BinaryExpr,
+                               returns a reference-counted Value*
 ```
 
 Both `terminal_main.cpp` and `gui_main.cpp` drive this exact same pipeline. The only difference is what happens to a `print` statement's output:
 
-- **Terminal:** `PrintStmt::execute()` falls back to `cout << ... << endl` when no handler is set.
-- **GUI:** `gui_main.cpp` installs a handler via `PrintStmt::set_handler(...)` before each run, redirecting output into the on-screen panel instead of the console.
+- **Terminal** — `PrintStmt::execute()` falls back to `cout << ... << endl` when no handler is set.
+- **GUI** — `gui_main.cpp` installs a handler via `PrintStmt::set_handler(...)` before each run, redirecting output into the on-screen panel instead of the console.
+
+---
 
 ## Known Limitations
 
-- No functions/procedures — every script is a flat sequence of top-level statements (capped at 256) plus nested blocks.
+- No functions or procedures — every script is a flat sequence of top-level statements (capped at 256) plus nested blocks.
 - No arrays, objects, or `let`-typed type annotations.
 - No unary operators (no `-x` or `!x`) — see the commented-out `parse_unary()` stub in `Parser.h`.
-- Numbers are always `double` internally; very large integers can lose precision.
+- Numbers are always `double` internally, so very large integers can lose precision.
 - The terminal build's `read_file` only looks in the current working directory.
+
+---
+
+## About
+
+ZScript was designed and built by **Muhammad Abdullah** as the final project for an Object-Oriented Programming course, covering the full pipeline of a programming language — lexer, parser, AST, tree-walking interpreter, and a desktop IDE — implemented entirely from scratch in C++.
