@@ -1,0 +1,117 @@
+// ============================================
+// ZScript Shape Printing Demo
+// ============================================
+
+// ---------- Square (5 x 5) ----------
+print("Square (5x5)");
+
+let size = 5;
+let i = 0;
+while (i < size) {
+    let row = "";
+    let j = 0;
+    while (j < size) {
+        row = row + "* ";
+        j = j + 1;
+    }
+    print(row);
+    i = i + 1;
+}
+
+print("");
+
+// ---------- Rectangle (3 x 7) ----------
+print("Rectangle (3x7)");
+
+let rows = 3;
+let cols = 7;
+let r = 0;
+while (r < rows) {
+    let line = "";
+    let c = 0;
+    while (c < cols) {
+        line = line + "# ";
+        c = c + 1;
+    }
+    print(line);
+    r = r + 1;
+}
+
+print("");
+
+// ---------- Right Triangle (height 5) ----------
+print("Right Triangle (height 5)");
+
+let height = 5;
+let t = 1;
+while (t <= height) {
+    let stars = "";
+    let k = 0;
+    while (k < t) {
+        stars = stars + "* ";
+        k = k + 1;
+    }
+    print(stars);
+    t = t + 1;
+}
+
+print("");
+
+// ---------- Pyramid (height 5) ----------
+print("Pyramid (height 5)");
+
+let pyramidHeight = 5;
+let p = 1;
+while (p <= pyramidHeight) {
+    let spaces = "";
+    let sp = 0;
+    while (sp < pyramidHeight - p) {
+        spaces = spaces + " ";
+        sp = sp + 1;
+    }
+
+    let starsRow = "";
+    let sc = 0;
+    let starCount = 2 * p - 1;
+    while (sc < starCount) {
+        starsRow = starsRow + "*";
+        sc = sc + 1;
+    }
+
+    print(spaces + starsRow);
+    p = p + 1;
+}
+
+print("");
+
+// ---------- Hollow Square (5 x 5) ----------
+print("Hollow Square (5x5)");
+
+let hs = 5;
+let hi = 0;
+while (hi < hs) {
+    let hrow = "";
+    let hj = 0;
+    while (hj < hs) {
+        if (hi == 0) {
+            hrow = hrow + "* ";
+        } else {
+            if (hi == hs - 1) {
+                hrow = hrow + "* ";
+            } else {
+                if (hj == 0) {
+                    hrow = hrow + "*";
+                } else {
+                    if (hj == hs - 1) {
+                        hrow = hrow + "* ";
+                    } else {
+                        hrow = hrow + "   ";
+                    }
+                }
+            }
+        }
+        hj = hj + 1;
+    }
+    print(hrow);
+    hi = hi + 1;
+}
